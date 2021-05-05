@@ -21,13 +21,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: docker.pkg.github.com
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -41,7 +34,6 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/main:latest
-            docker.pkg.github.com/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}/tinvest-exporter:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
