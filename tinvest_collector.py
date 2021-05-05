@@ -44,15 +44,15 @@ class TinvestCollector(object):
         self.account_id = account_id
 
     def collect(self):
-        self.generate_positions_metrics()
-        self.generate_currencies_metrics()
-        self.generate_etfs_metrics()
-        self.generate_operations_metrics()
+        self.__generate_positions_metrics()
+        self.__generate_currencies_metrics()
+        self.__generate_etfs_metrics()
+        self.__generate_operations_metrics()
 
         for metric in self.registry.collect():
             yield metric
 
-    def generate_positions_metrics(self):
+    def __generate_positions_metrics(self):
         for position in self.__get_positions():
             if position.average_position_price_no_nkd is not None:
                 self.position_average_price_no_nkd.labels(position.name,
@@ -84,11 +84,11 @@ class TinvestCollector(object):
             })
             self.position_lots.labels(position.name).set(position.lots)
 
-    def generate_currencies_metrics(self):
+    def __generate_currencies_metrics(self):
         for currency in self.__get_currencies():
             self.currency_balance.labels(currency.currency.name).set(currency.balance)
 
-    def generate_etfs_metrics(self):
+    def __generate_etfs_metrics(self):
         for etf in self.__get_etfs():
             orders = self.client.get_market_orderbook(etf.figi, 0)
             self.etf_last_price.labels(etf.name).set(orders.payload.last_price)
@@ -101,7 +101,7 @@ class TinvestCollector(object):
                 "trade_status": orders.payload.trade_status.name,
             })
 
-    def generate_operations_metrics(self):
+    def __generate_operations_metrics(self):
         for operation in self.__get_operations():
             if operation.commission is not None:
                 self.operation_commission.labels(operation.figi, operation.commission.currency.name,
