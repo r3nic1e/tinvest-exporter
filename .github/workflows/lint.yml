@@ -35,7 +35,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run flake8
-        uses: suo/flake8-github-action@releases/v1
+        uses: julianwachholz/flake8-action@v2
         with:
           checkName: lint
         env:
